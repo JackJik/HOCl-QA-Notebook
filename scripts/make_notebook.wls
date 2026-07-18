@@ -1,80 +1,61 @@
 #!/usr/bin/env wolframscript
-(* Create HOCl_QA_Suite.nb — thin UI wrapper over packages *)
+(* Rebuild HOCl_QA_Suite.nb via CreateDocument (known-good path for Mac FE). *)
 root = DirectoryName[DirectoryName[$InputFileName]];
 nbPath = FileNameJoin[{root, "HOCl_QA_Suite.nb"}];
+SetDirectory[root];
 
-init = "
-Module[{root, src, res},
-  root = Quiet[Check[NotebookDirectory[], \"\"]];
-  If[!StringQ[root] || root === \"\",
-    root = Quiet[Check[DirectoryName[NotebookFileName[]], Directory[]]]
-  ];
-  src = FileNameJoin[{root, \"src\"}];
-  $Path = DeleteDuplicates[Prepend[$Path, src]];
-  $HOClLoadErrors = {};
-  Do[
-    res = Quiet[Check[Get[FileNameJoin[{src, f}]]; True, False]];
-    If[!TrueQ[res], AppendTo[$HOClLoadErrors, f]],
-    {f, {\"HOClCore.wl\", \"Electrolysis.wl\", \"Pretreatment.wl\",
-      \"ShelfLife.wl\", \"Byproducts.wl\", \"Formulations.wl\",
-      \"UIComponents.wl\", \"HOClNotebookUI.wl\"}}
-  ];
-  HOClNotebookUI`HOClLoadAll[root];
-  If[ListQ[$HOClLoadErrors] && Length[$HOClLoadErrors] > 0,
-    Framed[
-      Style[\"Package load problem: \" <> StringRiffle[$HOClLoadErrors, \", \"] <>
-        \". Ensure the src/ folder sits next to this notebook.\", 13, Red, FontFamily -> \"Helvetica\"],
-      Background -> RGBColor[1, 0.93, 0.93], FrameMargins -> 12
-    ],
-    HOClNotebookUI`HOClDashboard[]
-  ]
-]
-";
+boxes = ToBoxes[
+  Defer[
+    Module[{d},
+      d = NotebookDirectory[];
+      If[!StringQ[d] || d === "", d = DirectoryName[NotebookFileName[]]];
+      Get[FileNameJoin[{d, "src", "LaunchHOCl.wl"}]]
+    ]
+  ],
+  StandardForm
+];
 
-(* Try FrontEnd first *)
 status = Quiet[Check[
   UsingFrontEnd[
-    nb = Notebook[{
-      Cell["TG Labs / 50MM — HOCl QA & R&D Suite", "Title"],
-      Cell[TextData[{
-        "Self-contained HOCl QA Bench + R&D Engine. ",
-        "If the dashboard does not appear, choose Evaluation → Evaluate Initialization Cells, ",
-        "and click Enable Dynamics if prompted. Requires full Mathematica on macOS. No internet/paclets."
-      }], "Text"],
-      Cell[BoxData[init], "Input", InitializationCell -> True],
-      Cell["Documentation: docs/README.md · Chemistry: docs/CHEMISTRY_NOTES.md · Assumptions: docs/ASSUMPTIONS.md", "Text"]
-    },
-      WindowTitle -> "HOCl QA & R&D Suite — TG Labs / 50MM",
-      WindowSize -> {1024, 800},
-      StyleDefinitions -> "Default.nb"
+    nb = CreateDocument[
+      {
+        TextCell["TG Labs / 50MM - HOCl QA & R&D Suite", "Title",
+          FontFamily -> "Arial", FontColor -> RGBColor[0.12, 0.35, 0.55]],
+        TextCell[
+          "Keep this notebook inside HOCl-QA-Notebook (next to src/). Select the blue cell and press Shift-Enter. Enable Dynamics if asked.",
+          "Text", FontFamily -> "Arial"],
+        Cell[BoxData[boxes], "Input",
+          InitializationCell -> True, CellOpen -> True,
+          Background -> RGBColor[0.93, 0.96, 1], FontSize -> 13],
+        TextCell[
+          "Dashboard appears below this cell after evaluation. Docs: docs/README.md",
+          "Text", FontFamily -> "Arial", FontSize -> 11]
+      },
+      WindowTitle -> "HOCl QA & R&D Suite - TG Labs / 50MM",
+      WindowSize -> {1100, 860},
+      Visible -> False,
+      (* Keep ShowStringCharacters default True so the Input cell shows "src" quotes *)
+      InitializationCellEvaluation -> True,
+      InitializationCellWarning -> False
     ];
-    Export[nbPath, nb, "NB"];
+    NotebookSave[nb, nbPath];
+    NotebookClose[nb];
     "ok"
   ],
   "fail"
 ]];
 
-If[status === "ok" && FileExistsQ[nbPath],
-  Print["PASS: Wrote notebook via Export: ", nbPath];
-  Exit[0]
-];
-
-(* Fallback without FrontEnd: Export Notebook expression directly *)
-nb = Notebook[{
-  Cell["TG Labs / 50MM — HOCl QA & R&D Suite", "Title"],
-  Cell["Self-contained HOCl QA Bench + R&D Engine. Evaluate initialization cells and enable dynamics. Full Mathematica on macOS; no internet/paclets.", "Text"],
-  Cell[BoxData[init], "Input", InitializationCell -> True],
-  Cell["Documentation: docs/README.md · Chemistry: docs/CHEMISTRY_NOTES.md · Assumptions: docs/ASSUMPTIONS.md", "Text"]
-},
-  WindowTitle -> "HOCl QA & R&D Suite — TG Labs / 50MM",
-  WindowSize -> {1024, 800},
-  StyleDefinitions -> "Default.nb"
-];
-
-Export[nbPath, nb, "NB"];
-If[FileExistsQ[nbPath],
-  Print["PASS: Wrote notebook (no FrontEnd): ", nbPath, " size=", FileByteCount[nbPath]];
-  Exit[0],
-  Print["FAIL: could not write notebook"];
+If[status =!= "ok", Print["FAIL"]; Exit[1]];
+raw = Import[nbPath, "Text"];
+Print["bytes ", FileByteCount[nbPath]];
+Print["TextCell bug ", StringContainsQ[raw, "TextCell["]];
+Print["Unevaluated ", StringContainsQ[raw, "Unevaluated"]];
+Print["LaunchHOCl ", StringContainsQ[raw, "LaunchHOCl"]];
+Print["cell styles check via Import:"];
+nb2 = Import[nbPath];
+Print[Length[First[nb2]], " cells: ", #[[2]] & /@ First[nb2]];
+If[StringContainsQ[raw, "TextCell["] || StringContainsQ[raw, "Unevaluated"],
   Exit[1]
 ];
+Print["PASS"];
+Exit[0];

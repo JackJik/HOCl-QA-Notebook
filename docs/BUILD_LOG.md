@@ -43,3 +43,16 @@ Scaffold full repository per Section 2; implement all science packages first (te
 ### Open calibration (not blockers for v1)
 
 See `ASSUMPTIONS.md` — k_base, Ea, demand coeffs, THM weights, pKa dT/dT.
+
+## 2026-07-18 — Mac FE syntax/display fix
+
+### Issues seen on Mac Mathematica
+1. Literal `Nothing` under title bar
+2. All labels showing with quote characters (ShowStringCharacters / Style form)
+3. Speciation table in InputForm (`3.` backticks, quoted notes)
+4. Fragile DynamicModule Initialization helpers + string BoxData notebook cell
+
+### Fixes
+- UIComponents: FontSize/FontWeight/FontColor Style options; Arial; ShowStringCharacters->False; LabeledGrid instead of TableForm
+- HOClNotebookUI: no Initialization helpers; no Nothing (use ""); MacUIStyle wrapper; ASCII-safe labels
+- make_notebook.wls: ExpressionCell with real expression (not string BoxData); CellOpen->False; notebook ShowStringCharacters->False
