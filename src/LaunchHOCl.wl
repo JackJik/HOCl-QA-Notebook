@@ -75,9 +75,9 @@ HOClLaunch[] := Module[
 
   Quiet[HOClNotebookUI`HOClLoadAll[rootDir]];
 
-  dash = HOClNotebookUI`HOClDashboard[];
-
-  Style[dash, FormatType -> StandardForm, ShowStringCharacters -> False]
+  (* Return DynamicModule bare — do NOT wrap in Style[].
+     Style[DynamicModule[...], ...] breaks button/tab interactivity on some Mac FE builds. *)
+  HOClNotebookUI`HOClDashboard[]
 ];
 
 (* Evaluating this file launches the suite *)

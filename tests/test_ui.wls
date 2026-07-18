@@ -35,9 +35,8 @@ assert[mode === "Landing", "bigButton does not set mode at construction"];
 
 (* --- 2. Launch path --- *)
 r = Get[FileNameJoin[{root, "src", "LaunchHOCl.wl"}]];
-assert[MatchQ[r, _Style | _DynamicModule] || Head[r] === Style || Head[r] === DynamicModule ||
-  (Head[r] === Style && MatchQ[r[[1]], _DynamicModule]),
-  "LaunchHOCl returns styled dashboard"];
+assert[Head[r] === DynamicModule || (Head[r] === Style && MatchQ[r[[1]], _DynamicModule]),
+  "LaunchHOCl returns DynamicModule dashboard"];
 
 (* --- 3. Core QA path numbers --- *)
 assert[approx[fHOCl[7.54, 25], 0.5, 0.01], "fHOCl pKa"];
@@ -91,15 +90,13 @@ assert[TrueQ[ex] && FileExistsQ[path] && FileByteCount[path] > 100, "PDF export 
 HOClNotebookUI`HOClLoadAll[root];
 dash = HOClNotebookUI`HOClDashboard[];
 assert[MatchQ[dash, _DynamicModule], "HOClDashboard is DynamicModule"];
-(* Flatten buttons from expression (DynamicModule body is held-ish; use Cases on FullForm) *)
-buttons = Cases[dash, Button[label_, act_, opts___] :> {label, HoldForm[act]}, Infinity];
-assert[Length[buttons] >= 4, "dashboard has >= 4 Buttons (nav)"];
-(* At least one action should involve Set/mode when held properly — inspect FullForm strings *)
 ff = ToString[FullForm[dash]];
-assert[StringContainsQ[ff, "Button"], "FullForm contains Button"];
-(* mode variable present in DynamicModule *)
-assert[StringContainsQ[ff, "mode"] || StringContainsQ[ff, "Landing"] || StringContainsQ[ff, "QA"],
-  "dashboard references navigation modes"];
+assert[StringContainsQ[ff, "TabView"], "dashboard uses TabView navigation"];
+assert[StringContainsQ[ff, "QA Bench"], "QA Bench tab present"];
+assert[StringContainsQ[ff, "R&D Engine"] || StringContainsQ[ff, "R\\&D"], "R&D tab present"];
+assert[StringContainsQ[ff, "Chemistry"], "Chemistry Ref tab present"];
+assert[StringContainsQ[ff, "Button"] || StringContainsQ[ff, "Export"],
+  "QA export control present (Button or export label)"];
 
 (* --- 8. All src packages load clean --- *)
 errs = {};

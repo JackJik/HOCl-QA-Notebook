@@ -34,7 +34,7 @@ status = Quiet[Check[
       WindowTitle -> "HOCl QA & R&D Suite - TG Labs / 50MM",
       WindowSize -> {1100, 860},
       Visible -> False,
-      ShowStringCharacters -> False,
+      (* Keep ShowStringCharacters default True so the Input cell shows "src" quotes *)
       InitializationCellEvaluation -> True,
       InitializationCellWarning -> False
     ];

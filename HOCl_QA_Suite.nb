@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[      2950,         94]
+NotebookDataLength[      2921,         93]
 NotebookOptionsPosition[      2082,         68]
-NotebookOutlinePosition[      2645,         89]
-CellTagsIndexPosition[      2602,         86]
+NotebookOutlinePosition[      2616,         88]
+CellTagsIndexPosition[      2573,         85]
 WindowTitle->HOCl QA & R&D Suite - TG Labs / 50MM
 WindowFrame->Normal*)
 
@@ -24,13 +24,13 @@ Cell[CellGroupData[{
 Cell["TG Labs / 50MM - HOCl QA & R&D Suite", "Title",
  FontFamily->"Arial",
  FontColor->RGBColor[
-  0.12, 0.35, 0.55],ExpressionUUID->"71749451-cea3-4ec4-8778-0b808a484461"],
+  0.12, 0.35, 0.55],ExpressionUUID->"16160baf-2e06-4035-9f78-ecf0a2ced655"],
 
 Cell["\<\
 Keep this notebook inside HOCl-QA-Notebook (next to src/). Select the blue \
 cell and press Shift-Enter. Enable Dynamics if asked.\
 \>", "Text",
- FontFamily->"Arial",ExpressionUUID->"03700ad1-02c8-42c0-af60-d24732dd0ef2"],
+ FontFamily->"Arial",ExpressionUUID->"76b45103-8fb8-4694-9927-dcb763b09bfb"],
 
 Cell[BoxData[
  RowBox[{"Module", "[", 
@@ -44,26 +44,26 @@ Cell[BoxData[
       RowBox[{
        RowBox[{"!", 
         RowBox[{"StringQ", "[", "d", "]"}]}], "||", 
-       RowBox[{"d", "===", "\<\"\"\>"}]}], ",", 
+       RowBox[{"d", "===", "\"\<\>\""}]}], ",", 
       RowBox[{"d", "=", 
        RowBox[{"DirectoryName", "[", 
         RowBox[{"NotebookFileName", "[", "]"}], "]"}]}]}], "]"}], ";", 
     RowBox[{"Get", "[", 
      RowBox[{"FileNameJoin", "[", 
       RowBox[{"{", 
-       RowBox[{"d", ",", "\<\"src\"\>", ",", "\<\"LaunchHOCl.wl\"\>"}], "}"}],
+       RowBox[{"d", ",", "\"\<src\>\"", ",", "\"\<LaunchHOCl.wl\>\""}], "}"}],
        "]"}], "]"}]}]}], "]"}]], "Input",
  CellOpen->True,
  InitializationCell->True,
  FontSize->13,
  Background->RGBColor[
-  0.93, 0.96, 1],ExpressionUUID->"d910743c-2d8d-4cec-8a55-02d3b6c8488f"],
+  0.93, 0.96, 1],ExpressionUUID->"68dfdfad-2059-44ff-9f8d-41294283af4a"],
 
 Cell["\<\
 Dashboard appears below this cell after evaluation. Docs: docs/README.md\
 \>", "Text",
  FontFamily->"Arial",
- FontSize->11,ExpressionUUID->"975aa21d-031a-4c14-b096-fb7a66ab7865"]
+ FontSize->11,ExpressionUUID->"7247b17a-ea31-404e-8110-a836a59af85a"]
 }, Open  ]]
 },
 InitializationCellEvaluation->True,
@@ -72,10 +72,9 @@ WindowSize->{1100, 860},
 WindowMargins->{{346, Automatic}, {103, Automatic}},
 WindowTitle->"HOCl QA & R&D Suite - TG Labs / 50MM",
 Visible->False,
-ShowStringCharacters->False,
 FrontEndVersion->"14.3 for Mac OS X x86 (64-bit) (July 8, 2025)",
 StyleDefinitions->"Default.nb",
-ExpressionUUID->"b1119e33-64f1-46b6-8744-0ac57ffbba64"
+ExpressionUUID->"b6dab453-c44f-4a6c-bedf-55c66157b171"
 ]
 (* End of Notebook Content *)
 
@@ -89,12 +88,12 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[626, 23, 173, 3, 70, "Title",ExpressionUUID->"71749451-cea3-4ec4-8778-0b808a484461"],
-Cell[802, 28, 231, 4, 70, "Text",ExpressionUUID->"03700ad1-02c8-42c0-af60-d24732dd0ef2"],
-Cell[1036, 34, 839, 25, 70, "Input",ExpressionUUID->"d910743c-2d8d-4cec-8a55-02d3b6c8488f",
+Cell[626, 23, 173, 3, 70, "Title",ExpressionUUID->"16160baf-2e06-4035-9f78-ecf0a2ced655"],
+Cell[802, 28, 231, 4, 70, "Text",ExpressionUUID->"76b45103-8fb8-4694-9927-dcb763b09bfb"],
+Cell[1036, 34, 839, 25, 70, "Input",ExpressionUUID->"68dfdfad-2059-44ff-9f8d-41294283af4a",
  CellOpen->True,
  InitializationCell->True],
-Cell[1878, 61, 188, 4, 70, "Text",ExpressionUUID->"975aa21d-031a-4c14-b096-fb7a66ab7865"]
+Cell[1878, 61, 188, 4, 70, "Text",ExpressionUUID->"7247b17a-ea31-404e-8110-a836a59af85a"]
 }, Open  ]]
 }
 ]

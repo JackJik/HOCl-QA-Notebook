@@ -83,7 +83,8 @@ bigButton[label_String, bg_, action_] := Button[
 
 HOClDashboard[] := DynamicModule[
   {
-    mode = "Landing",
+    (* tab index 1=Home 2=QA 3=R&D 4=Ref — TabView owns navigation (more reliable than Button+mode) *)
+    tab = 1,
     qaProduct = "HOCl Cleansing Spray",
     qaLot = "",
     qaDate = DateString[{"Year", "-", "Month", "-", "Day"}],
@@ -108,10 +109,10 @@ HOClDashboard[] := DynamicModule[
   If[productNames === {}, productNames = {"HOCl Cleansing Spray"}];
   If[!MemberQ[productNames, qaProduct], qaProduct = First[productNames]];
 
-  UIComponents`MacUIStyle @ Column[{
+  (* Do not wrap DynamicModule body in Style/MacUIStyle — breaks FE interactivity on Mac. *)
+  Column[{
     UIComponents`TitleBar[],
 
-    (* error banner - never use Nothing (shows as text on some Mac FE builds) *)
     Dynamic[
       If[ListQ[Global`$HOClLoadErrors] && Length[Global`$HOClLoadErrors] > 0,
         UIComponents`FriendlyError["Could not load: " <>
@@ -121,30 +122,11 @@ HOClDashboard[] := DynamicModule[
       ]
     ],
 
-    (* Inline Button + HoldRest helpers: assignment must stay unevaluated until click *)
-    Row[{
-      Button[txt["Home", FontSize -> 12, FontWeight -> Bold],
-        mode = "Landing", Appearance -> "Palette", ImageSize -> {120, 30}],
-      Spacer[8],
-      Button[txt["QA Bench", FontSize -> 12, FontWeight -> Bold],
-        mode = "QA", Appearance -> "Palette", ImageSize -> {120, 30}],
-      Spacer[8],
-      Button[txt["R&D Engine", FontSize -> 12, FontWeight -> Bold],
-        mode = "RD", Appearance -> "Palette", ImageSize -> {120, 30}],
-      Spacer[8],
-      Button[txt["Chemistry Ref", FontSize -> 12, FontWeight -> Bold],
-        mode = "Ref", Appearance -> "Palette", ImageSize -> {120, 30}]
-    }],
+    Spacer[6],
 
-    Spacer[10],
-
-    (* ===== MAIN PANEL SWITCH (inline - no Initialization helpers) ===== *)
-    Dynamic[
-      Switch[mode,
-
-        (* ----- LANDING ----- *)
-        "Landing",
-        Column[{
+    (* TabView is the supported navigation control — tabs always switch. *)
+    TabView[{
+      "Home" -> Column[{
           UIComponents`SectionHeader["Welcome"],
           Spacer[6],
           UIComponents`InfoPanel[
@@ -156,20 +138,15 @@ HOClDashboard[] := DynamicModule[
               txt["Target: 50-225 ppm FAC (as HOCl) from NaCl electrolysis of pretreated distilled water.", FontSize -> 12],
               Spacer[4],
               txt["Decision-support only - not a release authority. Confirm by validated lab methods.",
-                FontSize -> 11, FontSlant -> Italic, FontColor -> col["Muted"]]
+                FontSize -> 11, FontSlant -> Italic, FontColor -> col["Muted"]],
+              Spacer[6],
+              txt["Use the tabs above: Home | QA Bench | R&D Engine | Chemistry Ref.",
+                FontSize -> 12, FontWeight -> Bold]
             }, Spacings -> 0.45]
-          ],
-          Spacer[12],
-          Row[{
-            bigButton["Open QA Bench", col["Green"], mode = "QA"],
-            Spacer[16],
-            bigButton["Open R&D Engine", col["HeaderBlue"], mode = "RD"]
-          }]
+          ]
         }, Spacings -> 0.8],
 
-        (* ----- QA BENCH ----- *)
-        "QA",
-        Column[{
+      "QA Bench" -> Column[{
           UIComponents`SectionHeader["QA Bench Mode"],
           txt["Operator floor entry - measured values only", FontSize -> 11, FontColor -> col["Muted"]],
           Spacer[6],
@@ -317,9 +294,7 @@ HOClDashboard[] := DynamicModule[
             txt[qaMsg, FontSize -> 11, FontColor -> col["Green"]], ""]]
         }, Spacings -> 0.6],
 
-        (* ----- R&D ENGINE ----- *)
-        "RD",
-        Column[{
+      "R&D Engine" -> Column[{
           UIComponents`SectionHeader["R&D Simulation Engine"],
           Spacer[6],
 
@@ -576,9 +551,7 @@ HOClDashboard[] := DynamicModule[
             FontSize -> 10, FontSlant -> Italic, FontColor -> col["Muted"]]
         }, Spacings -> 0.45],
 
-        (* ----- CHEMISTRY REF ----- *)
-        "Ref",
-        Column[{
+      "Chemistry Ref" -> Column[{
           UIComponents`SectionHeader["Chemistry reference"],
           txt["HOCl / OCl- operator sanity table (~25 C)", FontSize -> 12],
           Spacer[4],
@@ -593,18 +566,21 @@ HOClDashboard[] := DynamicModule[
           Spacer[8],
           txt[HOClCore`HOClConstants["disclaimer"],
             FontSize -> 10, FontSlant -> Italic, FontColor -> col["Muted"]]
-        }, Spacings -> 0.5],
-
-        (* fallback *)
-        _,
-        txt["Unknown mode", FontColor -> col["Red"]]
+        }, Spacings -> 0.5]
+      },
+        Dynamic[tab],
+        ImageSize -> {980, Automatic},
+        Alignment -> Top,
+        ControlPlacement -> Top,
+        LabelStyle -> {FontFamily -> "Arial", FontSize -> 12, FontWeight -> Bold},
+        FrameMargins -> 8
       ],
-      TrackedSymbols :> {mode}
-    ],
 
     Spacer[12],
     UIComponents`DisclaimerFooter[]
-  }, Spacings -> 0.7]
+  }, Spacings -> 0.7],
+  SynchronousUpdating -> False,
+  SaveDefinitions -> False
 ];
 
 End[];
