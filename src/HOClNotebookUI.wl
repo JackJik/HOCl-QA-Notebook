@@ -60,16 +60,25 @@ riskChip[level_String] := Framed[
   FrameStyle -> None, FrameMargins -> {{10, 10}, {5, 5}}, RoundingRadius -> 6
 ];
 
+(* HoldRest is REQUIRED: without it, `mode = "QA"` runs when the button is
+   *built*, so the click action is a no-op string and navigation appears broken. *)
+SetAttributes[navButton, HoldRest];
 navButton[label_String, action_] := Button[
   txt[label, FontSize -> 12, FontWeight -> Bold],
-  action, Appearance -> "Palette", ImageSize -> {110, 28}
+  action,
+  Appearance -> "Palette",
+  ImageSize -> {120, 30},
+  Method -> "Preemptive"
 ];
 
+SetAttributes[bigButton, HoldRest];
 bigButton[label_String, bg_, action_] := Button[
   Framed[txt[label, FontSize -> 14, FontWeight -> Bold, FontColor -> GrayLevel[1]],
     Background -> bg, FrameMargins -> {{16, 16}, {10, 10}}, FrameStyle -> None,
     RoundingRadius -> 4],
-  action, Appearance -> None
+  action,
+  Appearance -> None,
+  Method -> "Queued"
 ];
 
 HOClDashboard[] := DynamicModule[
@@ -112,14 +121,19 @@ HOClDashboard[] := DynamicModule[
       ]
     ],
 
+    (* Inline Button + HoldRest helpers: assignment must stay unevaluated until click *)
     Row[{
-      navButton["Home", mode = "Landing"],
+      Button[txt["Home", FontSize -> 12, FontWeight -> Bold],
+        mode = "Landing", Appearance -> "Palette", ImageSize -> {120, 30}],
       Spacer[8],
-      navButton["QA Bench", mode = "QA"],
+      Button[txt["QA Bench", FontSize -> 12, FontWeight -> Bold],
+        mode = "QA", Appearance -> "Palette", ImageSize -> {120, 30}],
       Spacer[8],
-      navButton["R&D Engine", mode = "RD"],
+      Button[txt["R&D Engine", FontSize -> 12, FontWeight -> Bold],
+        mode = "RD", Appearance -> "Palette", ImageSize -> {120, 30}],
       Spacer[8],
-      navButton["Chemistry Ref", mode = "Ref"]
+      Button[txt["Chemistry Ref", FontSize -> 12, FontWeight -> Bold],
+        mode = "Ref", Appearance -> "Palette", ImageSize -> {120, 30}]
     }],
 
     Spacer[10],
@@ -584,7 +598,8 @@ HOClDashboard[] := DynamicModule[
         (* fallback *)
         _,
         txt["Unknown mode", FontColor -> col["Red"]]
-      ]
+      ],
+      TrackedSymbols :> {mode}
     ],
 
     Spacer[12],
