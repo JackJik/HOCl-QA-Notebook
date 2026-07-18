@@ -1,0 +1,10 @@
+.DS_Store
+*.mx
+*.paclet
+export/*.pdf
+export/*.PDF
+.Wolfram*
+*.bak
+*~
+.idea/
+.vscode/

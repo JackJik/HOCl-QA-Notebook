@@ -1,0 +1,168 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[      6240,        159]
+NotebookOptionsPosition[      5573,        141]
+NotebookOutlinePosition[      5982,        157]
+CellTagsIndexPosition[      5939,        154]
+WindowTitle->HOCl QA & R&D Suite \342\200\224 TG Labs / 50MM
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["TG Labs / 50MM \[AHat]\.80\.94 HOCl QA & R&D Suite", "Title",ExpressionUUID->"1d51e374-e031-426a-b8bc-2fe6fae8b8af"],
+
+Cell["\<\
+Self-contained HOCl QA Bench + R&D Engine. If the dashboard does not appear, \
+choose Evaluation \[AHat]\.86\.92 Evaluate Initialization Cells, and click \
+Enable Dynamics if prompted. Requires full Mathematica on macOS. No \
+internet/paclets.\
+\>", "Text",ExpressionUUID->"549ace9c-1897-4647-9779-e1dd2874253a"],
+
+Cell[BoxData[
+ RowBox[{"\n", 
+  RowBox[{
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"root", ",", " ", "src", ",", " ", "res"}], "}"}], ",", "\n", 
+     "  ", 
+     RowBox[{
+      RowBox[{"root", " ", "=", " ", 
+       RowBox[{"Quiet", "[", 
+        RowBox[{"Check", "[", 
+         RowBox[{
+          RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", "\"\<\>\""}], 
+         "]"}], "]"}]}], ";", "\n", "  ", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"!", 
+          RowBox[{"StringQ", "[", "root", "]"}]}], " ", "||", " ", 
+         RowBox[{"root", " ", "===", " ", "\"\<\>\""}]}], ",", "\n", "    ", 
+        RowBox[{"root", " ", "=", " ", 
+         RowBox[{"Quiet", "[", 
+          RowBox[{"Check", "[", 
+           RowBox[{
+            RowBox[{"DirectoryName", "[", 
+             RowBox[{"NotebookFileName", "[", "]"}], "]"}], ",", " ", 
+            RowBox[{"Directory", "[", "]"}]}], "]"}], "]"}]}]}], "\n", "  ", 
+       "]"}], ";", "\n", "  ", 
+      RowBox[{"src", " ", "=", " ", 
+       RowBox[{"FileNameJoin", "[", 
+        RowBox[{"{", 
+         RowBox[{"root", ",", " ", "\"\<src\>\""}], "}"}], "]"}]}], ";", "\n",
+       "  ", 
+      RowBox[{"$Path", " ", "=", " ", 
+       RowBox[{"DeleteDuplicates", "[", 
+        RowBox[{"Prepend", "[", 
+         RowBox[{"$Path", ",", " ", "src"}], "]"}], "]"}]}], ";", "\n", "  ", 
+      
+      RowBox[{"$HOClLoadErrors", " ", "=", " ", 
+       RowBox[{"{", "}"}]}], ";", "\n", "  ", 
+      RowBox[{"Do", "[", "\n", "    ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"res", " ", "=", " ", 
+          RowBox[{"Quiet", "[", 
+           RowBox[{"Check", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Get", "[", 
+               RowBox[{"FileNameJoin", "[", 
+                RowBox[{"{", 
+                 RowBox[{"src", ",", " ", "f"}], "}"}], "]"}], "]"}], ";", 
+              " ", "True"}], ",", " ", "False"}], "]"}], "]"}]}], ";", "\n", 
+         "    ", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"!", 
+            RowBox[{"TrueQ", "[", "res", "]"}]}], ",", " ", 
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"$HOClLoadErrors", ",", " ", "f"}], "]"}]}], "]"}]}], ",",
+         "\n", "    ", 
+        RowBox[{"{", 
+         RowBox[{"f", ",", " ", 
+          RowBox[{"{", 
+           
+           RowBox[{"\"\<HOClCore.wl\>\"", ",", " ", "\"\<Electrolysis.wl\>\"",
+             ",", " ", "\"\<Pretreatment.wl\>\"", ",", "\n", 
+            "      ", "\"\<ShelfLife.wl\>\"", ",", 
+            " ", "\"\<Byproducts.wl\>\"", ",", " ", "\"\<Formulations.wl\>\"",
+             ",", "\n", "      ", "\"\<UIComponents.wl\>\"", ",", 
+            " ", "\"\<HOClNotebookUI.wl\>\""}], "}"}]}], "}"}]}], "\n", "  ", 
+       "]"}], ";", "\n", "  ", 
+      RowBox[{"HOClNotebookUI`HOClLoadAll", "[", "root", "]"}], ";", "\n", 
+      "  ", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ListQ", "[", "$HOClLoadErrors", "]"}], " ", "&&", " ", 
+         RowBox[{
+          RowBox[{"Length", "[", "$HOClLoadErrors", "]"}], " ", ">", " ", 
+          "0"}]}], ",", "\n", "    ", 
+        RowBox[{"Framed", "[", "\n", "      ", 
+         RowBox[{
+          RowBox[{"Style", "[", 
+           RowBox[{
+            RowBox[{"\"\<Package load problem: \>\"", " ", "<>", " ", 
+             RowBox[{"StringRiffle", "[", 
+              RowBox[{"$HOClLoadErrors", ",", " ", "\"\<, \>\""}], "]"}], " ",
+              "<>", "\n", 
+             "        ", "\"\<. Ensure the src/ folder sits next to this \
+notebook.\>\""}], ",", " ", "13", ",", " ", "Red", ",", " ", 
+            RowBox[{"FontFamily", " ", "->", " ", "\"\<Helvetica\>\""}]}], 
+           "]"}], ",", "\n", "      ", 
+          RowBox[{"Background", " ", "->", " ", 
+           RowBox[{"RGBColor", "[", 
+            RowBox[{"1", ",", " ", "0.93", ",", " ", "0.93"}], "]"}]}], ",", 
+          " ", 
+          RowBox[{"FrameMargins", " ", "->", " ", "12"}]}], "\n", "    ", 
+         "]"}], ",", "\n", "    ", 
+        RowBox[{"HOClNotebookUI`HOClDashboard", "[", "]"}]}], "\n", "  ", 
+       "]"}]}]}], "\n", "]"}], "\n"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"caa3178a-1eeb-479c-9795-4a84f3b5ae95"],
+
+Cell["\<\
+Documentation: docs/README.md \[CapitalAHat]\[CenterDot] Chemistry: \
+docs/CHEMISTRY_NOTES.md \[CapitalAHat]\[CenterDot] Assumptions: \
+docs/ASSUMPTIONS.md\
+\>", "Text",ExpressionUUID->"2e4588bd-92eb-4836-9a5e-58774df15e58"]
+},
+WindowSize->{1024, 800},
+WindowTitle->"HOCl QA & R&D Suite \[AHat]\.80\.94 TG Labs / 50MM",
+FrontEndVersion->"14.3 for Mac OS X x86 (64-bit) (July 8, 2025)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"0788dddf-e0a6-41d8-8ce4-8c5a188012f3"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[615, 21, 122, 0, 70, "Title",ExpressionUUID->"1d51e374-e031-426a-b8bc-2fe6fae8b8af"],
+Cell[740, 23, 322, 5, 70, "Text",ExpressionUUID->"549ace9c-1897-4647-9779-e1dd2874253a"],
+Cell[1065, 30, 4267, 103, 70, "Input",ExpressionUUID->"caa3178a-1eeb-479c-9795-4a84f3b5ae95",
+ InitializationCell->True],
+Cell[5335, 135, 234, 4, 70, "Text",ExpressionUUID->"2e4588bd-92eb-4836-9a5e-58774df15e58"]
+}
+]
+*)
+
+(* End of internal cache information *)
