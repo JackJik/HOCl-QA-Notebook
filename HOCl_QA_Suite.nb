@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[      5849,        166]
-NotebookOptionsPosition[      5038,        142]
-NotebookOutlinePosition[      5541,        161]
-CellTagsIndexPosition[      5498,        158]
+NotebookDataLength[      6638,        190]
+NotebookOptionsPosition[      5710,        163]
+NotebookOutlinePosition[      6330,        185]
+CellTagsIndexPosition[      6287,        182]
 WindowTitle->HOCl QA & R&D Suite - TG Labs / 50MM
 WindowFrame->Normal*)
 
@@ -24,23 +24,23 @@ Cell[CellGroupData[{
 Cell["TG Labs / 50MM - HOCl QA & R&D Suite", "Title",
  FontFamily->"Arial",
  FontColor->RGBColor[
-  0.12, 0.35, 0.55],ExpressionUUID->"47b1f9dc-7dfc-4e5f-abe1-bb2c25450c75"],
+  0.12, 0.35, 0.55],ExpressionUUID->"c3136dc5-5e80-488a-a36d-5c7015a926b6"],
 
 Cell["\<\
-Self-contained HOCl QA Bench + R&D Engine. If the dashboard does not appear: \
-Evaluation > Evaluate Initialization Cells, and enable dynamics if prompted. \
-Full Mathematica on macOS. No internet or paclets.\
+Click anywhere in the code cell below and press Shift+Enter (or: Evaluation > \
+Evaluate Initialization Cells). Enable Dynamics if Mathematica asks. Requires \
+the full repo folder (src/ next to this .nb).\
 \>", "Text",
- FontFamily->"Arial",ExpressionUUID->"9ff85067-49ac-491b-90a8-8561a1381a65"],
+ FontFamily->"Arial",ExpressionUUID->"cd16695a-dad8-4cc4-80aa-2937fb5f0140"],
 
 Cell[BoxData[
  RowBox[{"Unevaluated", "[", 
   RowBox[{"Module", "[", 
    RowBox[{
     RowBox[{"{", 
-     RowBox[{"root", ",", "src", ",", "res", ",", "dash"}], "}"}], ",", 
+     RowBox[{"rootDir", ",", "src", ",", "res", ",", "errs"}], "}"}], ",", 
     RowBox[{
-     RowBox[{"root", "=", 
+     RowBox[{"rootDir", "=", 
       RowBox[{"Quiet", "[", 
        RowBox[{"Check", "[", 
         RowBox[{
@@ -50,9 +50,9 @@ Cell[BoxData[
       RowBox[{
        RowBox[{
         RowBox[{"!", 
-         RowBox[{"StringQ", "[", "root", "]"}]}], "||", 
-        RowBox[{"root", "===", "\<\"\"\>"}]}], ",", 
-       RowBox[{"root", "=", 
+         RowBox[{"StringQ", "[", "rootDir", "]"}]}], "||", 
+        RowBox[{"rootDir", "===", "\<\"\"\>"}]}], ",", 
+       RowBox[{"rootDir", "=", 
         RowBox[{"Quiet", "[", 
          RowBox[{"Check", "[", 
           RowBox[{
@@ -62,12 +62,34 @@ Cell[BoxData[
      RowBox[{"src", "=", 
       RowBox[{"FileNameJoin", "[", 
        RowBox[{"{", 
-        RowBox[{"root", ",", "\<\"src\"\>"}], "}"}], "]"}]}], ";", 
+        RowBox[{"rootDir", ",", "\<\"src\"\>"}], "}"}], "]"}]}], ";", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"DirectoryQ", "[", "src", "]"}]}], ",", 
+       RowBox[{"Return", "[", 
+        FrameBox[
+         StyleBox[
+          
+          RowBox[{"\<\"Cannot find src/ next to this notebook.\\nExpected: \"\
+\>", "<>", 
+           RowBox[{"ToString", "[", 
+            RowBox[{"src", ",", "InputForm"}], "]"}], 
+           "<>", "\<\"\\nClone/open the full HOCl-QA-Notebook folder, not a \
+lone .nb file.\"\>"}],
+          StripOnInput->False,
+          ShowStringCharacters->False,
+          FontFamily->"Arial",
+          FontSize->13,
+          FontColor->RGBColor[1, 0, 0]],
+         Background->RGBColor[1, 0.93, 0.93],
+         FrameMargins->16,
+         StripOnInput->False], "]"}]}], "]"}], ";", 
      RowBox[{"$Path", "=", 
       RowBox[{"DeleteDuplicates", "[", 
        RowBox[{"Prepend", "[", 
         RowBox[{"$Path", ",", "src"}], "]"}], "]"}]}], ";", 
-     RowBox[{"$HOClLoadErrors", "=", 
+     RowBox[{"errs", "=", 
       RowBox[{"{", "}"}]}], ";", 
      RowBox[{"Do", "[", 
       RowBox[{
@@ -87,7 +109,7 @@ Cell[BoxData[
           RowBox[{"!", 
            RowBox[{"TrueQ", "[", "res", "]"}]}], ",", 
           RowBox[{"AppendTo", "[", 
-           RowBox[{"$HOClLoadErrors", ",", "f"}], "]"}]}], "]"}]}], ",", 
+           RowBox[{"errs", ",", "f"}], "]"}]}], "]"}]}], ",", 
        RowBox[{"{", 
         RowBox[{"f", ",", 
          RowBox[{"{", 
@@ -97,57 +119,59 @@ Cell[BoxData[
            ",", "\<\"Byproducts.wl\"\>", ",", "\<\"Formulations.wl\"\>", 
            ",", "\<\"UIComponents.wl\"\>", ",", "\<\"HOClNotebookUI.wl\"\>"}],
            "}"}]}], "}"}]}], "]"}], ";", 
-     RowBox[{"Quiet", "[", 
-      RowBox[{"HOClNotebookUI`HOClLoadAll", "[", "root", "]"}], "]"}], ";", 
-     RowBox[{"dash", "=", 
-      RowBox[{"If", "[", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"ListQ", "[", "$HOClLoadErrors", "]"}], "&&", 
-         RowBox[{
-          RowBox[{"Length", "[", "$HOClLoadErrors", "]"}], ">", "0"}]}], ",", 
-        
+     RowBox[{"$HOClLoadErrors", "=", "errs"}], ";", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"errs", "=!=", 
+        RowBox[{"{", "}"}]}], ",", 
+       RowBox[{"Return", "[", 
         FrameBox[
          StyleBox[
-          RowBox[{"\<\"Package load problem: \"\>", "<>", 
+          RowBox[{"\<\"Package load failed: \"\>", "<>", 
            RowBox[{"StringRiffle", "[", 
-            RowBox[{"$HOClLoadErrors", ",", "\<\", \"\>"}], "]"}], 
-           "<>", "\<\". Ensure the src/ folder sits next to this \
-notebook.\"\>"}],
+            RowBox[{"errs", ",", "\<\", \"\>"}], "]"}], 
+           "<>", "\<\"\\nPath used: \"\>", "<>", "src"}],
           StripOnInput->False,
           ShowStringCharacters->False,
           FontFamily->"Arial",
           FontSize->13,
           FontColor->RGBColor[1, 0, 0]],
          Background->RGBColor[1, 0.93, 0.93],
-         FrameMargins->12,
-         StripOnInput->False], ",", 
-        RowBox[{"HOClNotebookUI`HOClDashboard", "[", "]"}]}], "]"}]}], ";", 
-     StyleBox["dash",
+         FrameMargins->16,
+         StripOnInput->False], "]"}]}], "]"}], ";", 
+     RowBox[{"Quiet", "[", 
+      RowBox[{"HOClNotebookUI`HOClLoadAll", "[", "rootDir", "]"}], "]"}], ";", 
+     StyleBox[
+      RowBox[{"HOClNotebookUI`HOClDashboard", "[", "]"}],
       StripOnInput->False,
       FormatType->StandardForm,
       ShowStringCharacters->False]}]}], "]"}], "]"}]], "Input",
- CellOpen->False,
+ CellOpen->True,
  InitializationCell->True,
- FontSize->10,ExpressionUUID->"d9e63e56-efa6-41e4-a228-94bd127b6417"],
+ FontSize->10,
+ Background->RGBColor[
+  0.96, 0.97, 0.99],ExpressionUUID->"3b2fd641-91a7-4dab-95c7-a90ca49af04b"],
 
 Cell["\<\
-Tip: If you need to re-run, choose Evaluation > Evaluate Initialization \
-Cells. Documentation: docs/README.md | Chemistry: docs/CHEMISTRY_NOTES.md | \
-Assumptions: docs/ASSUMPTIONS.md\
+After evaluation, the QA Bench / R&D dashboard appears as output under the \
+code cell. Docs: docs/README.md | docs/CHEMISTRY_NOTES.md | \
+docs/ASSUMPTIONS.md\
 \>", "Text",
  FontFamily->"Arial",
- FontSize->11,ExpressionUUID->"d1afe94f-9976-49b7-b2c7-d3585bbe0796"]
+ FontSize->11,ExpressionUUID->"8f20b1ed-97b5-446c-9b97-927e9b37a6fb"]
 }, Open  ]]
 },
-WindowSize->{1040, 820},
-WindowMargins->{{376, Automatic}, {123, Automatic}},
+InitializationCellEvaluation->True,
+InitializationCellWarning->False,
+NotebookEventActions->{"WindowClose" :> Null},
+WindowSize->{1100, 860},
+WindowMargins->{{346, Automatic}, {103, Automatic}},
 WindowTitle->"HOCl QA & R&D Suite - TG Labs / 50MM",
 FormatType->StandardForm,
 ShowStringCharacters->False,
 FrontEndVersion->"14.3 for Mac OS X x86 (64-bit) (July 8, 2025)",
 StyleDefinitions->"Default.nb",
-ExpressionUUID->"08ff0668-dcd6-41ca-9749-ba86e5a45422"
+ExpressionUUID->"a55416f7-8327-4c80-87f1-95d485c4e710"
 ]
 (* End of Notebook Content *)
 
@@ -161,12 +185,12 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[626, 23, 173, 3, 70, "Title",ExpressionUUID->"47b1f9dc-7dfc-4e5f-abe1-bb2c25450c75"],
-Cell[802, 28, 309, 5, 70, "Text",ExpressionUUID->"9ff85067-49ac-491b-90a8-8561a1381a65"],
-Cell[1114, 35, 3605, 96, 19, "Input",ExpressionUUID->"d9e63e56-efa6-41e4-a228-94bd127b6417",
- CellOpen->False,
+Cell[626, 23, 173, 3, 70, "Title",ExpressionUUID->"c3136dc5-5e80-488a-a36d-5c7015a926b6"],
+Cell[802, 28, 306, 5, 70, "Text",ExpressionUUID->"cd16695a-dad8-4cc4-80aa-2937fb5f0140"],
+Cell[1111, 35, 4306, 117, 70, "Input",ExpressionUUID->"3b2fd641-91a7-4dab-95c7-a90ca49af04b",
+ CellOpen->True,
  InitializationCell->True],
-Cell[4722, 133, 300, 6, 70, "Text",ExpressionUUID->"d1afe94f-9976-49b7-b2c7-d3585bbe0796"]
+Cell[5420, 154, 274, 6, 70, "Text",ExpressionUUID->"8f20b1ed-97b5-446c-9b97-927e9b37a6fb"]
 }, Open  ]]
 }
 ]

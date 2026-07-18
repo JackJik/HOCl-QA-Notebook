@@ -8,14 +8,19 @@ Portable **Mathematica** notebook for troubleshooting, QA, and shelf-life predic
 
 ## Quick start (MacBook Pro)
 
-1. Clone or copy this repository anywhere on the Mac.
+1. Clone or copy this **entire repository** anywhere on the Mac (you need the `src/` folder next to the `.nb`).
 2. Double-click **`HOCl_QA_Suite.nb`** (or open it from Mathematica → File → Open).
-3. If prompted, click **Enable Dynamics** / evaluate initialization.
-4. On the landing dashboard, choose:
+3. **Run the highlighted code cell** (light blue background):
+   - Click in that cell and press **Shift+Enter**, **or**
+   - Menu: **Evaluation → Evaluate Initialization Cells**
+4. If Mathematica asks, click **Enable Dynamics** / **Yes** to evaluate initialization cells.
+5. The **dashboard appears as output under the code cell**. Use:
    - **QA Bench** — floor measurements → pass/fail, speciation, shelf life, PDF report  
    - **R&D Engine** — interactive simulators for chemists  
 
-Packages load automatically from `src/` using paths relative to the notebook directory. If a package is missing, a friendly error panel appears (not a raw Wolfram dump).
+If you only see the title and tip text with a blank page, the code cell has not been evaluated yet — run step 3.
+
+Packages load from `src/` via paths relative to the notebook directory. If a package is missing, a friendly error panel appears (not a raw Wolfram dump).
 
 ---
 
