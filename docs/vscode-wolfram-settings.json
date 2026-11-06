@@ -1,0 +1,24 @@
+{
+    "files.associations": {
+        "*.m": "wolfram",
+        "*.wl": "wolfram",
+        "*.wls": "wolfram",
+        "*.nb": "wolfram"
+    },
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": true,
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "[wolfram]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.wordWrap": "on",
+        "editor.rulers": [80, 100]
+    },
+    "search.exclude": {
+        "**/*.nb": true
+    },
+    "wolfram.lsp.enable": true,
+    "wolfram.format.enable": true
+}
